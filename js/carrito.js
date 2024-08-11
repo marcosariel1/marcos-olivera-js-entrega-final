@@ -188,5 +188,39 @@ function vaciarCarrito() {
   
 };
 
-  
+//comprar
+const comprarBoton = document.getElementById('botonComprar');
+
+comprarBoton.addEventListener("click", comprar);
+
+function comprar() {
+
+  Swal.fire({
+    title: "¿Estas seguro?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Comprar"
+  }).then((result) => {
+    /* Read more about isConfirmed, isDenied below */
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "¡Su compra se ha realizado con éxito!",
+        text: "¡Gracias por confiar en Pastelería ES POR TÍ!",
+        icon: "success"
+      });
+      carrito.length = 0;
+      localStorage.setItem("carrito", JSON.stringify(carrito));
+      pintarCarrito(carrito);
+     
+    
+    }
+  });
+
+  actualizarTotalCarrito(carrito);
+ 
+};
+
+
   
