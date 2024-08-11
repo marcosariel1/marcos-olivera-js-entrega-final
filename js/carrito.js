@@ -14,7 +14,7 @@ const validarProductoCarrito = (productoId) => {
 
   Toastify({
     text: "Producto agregado",
-    duration: 3000,
+    duration: 2000,
     newWindow: true,
     close: true,
     gravity: "top", // `top` or `bottom`
@@ -51,9 +51,10 @@ const validarProductoCarrito = (productoId) => {
   }
 };
 
+
+
 const pintarProductosCarrito = (producto) => {
-  
-  
+    
   const modalBody = document.querySelector('.modal-body');
   const div = document.createElement('div');
 
@@ -62,17 +63,18 @@ const pintarProductosCarrito = (producto) => {
     <p>$${producto.precio}</p>
     <p id=cantidad${producto.id}>cantidad ${producto.cantidad}</p>
     <button class="botonEliminar" value="${producto.id}">Eliminar producto</button>
-    
-    `
+      `
   modalBody.appendChild(div);
 
 };
+
+
 
 const eliminarProductoCarrito = (productoId) => {
   
   Toastify({
     text: "Producto eliminado",
-    duration: 3000,
+    duration: 2000,
     newWindow: true,
     close: true,
     gravity: "top", // `top` or `bottom`
@@ -96,6 +98,8 @@ const eliminarProductoCarrito = (productoId) => {
 
 };
 
+
+
 const pintarCarrito = (carrito) => {
   
   const modalBody = document.querySelector('.modal-body');
@@ -105,14 +109,12 @@ const pintarCarrito = (carrito) => {
   carrito.forEach(producto => {
     const div = document.createElement('div');
 
-
-    div.innerHTML += `
+  div.innerHTML += `
       <p>${producto.nombre}</p>
       <p>$${producto.precio}</p>
       <p id=cantidad${producto.id}>cantidad ${producto.cantidad}</p>
       <button class="botonEliminar" value="${producto.id}">Eliminar producto</button>
-      
-      `
+        `
     modalBody.appendChild(div);
 
   });
@@ -136,9 +138,7 @@ const pintarTotalesCarrito = (compraTotal) => {
 
   const precioTotal = document.getElementById('precioTotal');
 
-
   precioTotal.innerText = compraTotal;
-
 
 };
 
@@ -165,7 +165,7 @@ function vaciarCarrito() {
   Swal.fire({
     title: "¿Esás seguro?",
     icon: "question",
-    html:"Se borrarán todos tus productos",
+    html:`Se borrarán ${carrito.reduce((acc, producto) => acc + producto.cantidad, 0)} productos`,
     showCancelButton: true,
     focusConfirm: false,
     confirmButtonText: "Si",
@@ -177,15 +177,11 @@ function vaciarCarrito() {
       localStorage.setItem("carrito", JSON.stringify(carrito));
       pintarCarrito(carrito);
      
-    
     }
   });
 
-  
   actualizarTotalCarrito(carrito);
-
-  
-  
+ 
 };
 
 //comprar
@@ -199,22 +195,23 @@ function comprar() {
     title: "¿Estas seguro?",
     icon: "warning",
     showCancelButton: true,
-    confirmButtonColor: "#3085d6",
+    cancelButtonText:"Cancelar",
     cancelButtonColor: "#d33",
+    confirmButtonColor: "#3085d6",
     confirmButtonText: "Comprar"
   }).then((result) => {
     /* Read more about isConfirmed, isDenied below */
     if (result.isConfirmed) {
+      carrito.length = 0;
+      localStorage.setItem("carrito", JSON.stringify(carrito));
+      
       Swal.fire({
         title: "¡Su compra se ha realizado con éxito!",
         text: "¡Gracias por confiar en Pastelería ES POR TÍ!",
         icon: "success"
       });
-      carrito.length = 0;
-      localStorage.setItem("carrito", JSON.stringify(carrito));
+       
       pintarCarrito(carrito);
-     
-    
     }
   });
 
@@ -222,5 +219,3 @@ function comprar() {
  
 };
 
-
-  
