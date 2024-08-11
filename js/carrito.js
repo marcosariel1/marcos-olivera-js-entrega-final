@@ -25,7 +25,7 @@ const validarProductoCarrito = (productoId) => {
       borderRadius: "2rem",
       textTransform: "uppercase"
     },
-    onClick: function(){} // Callback after click
+    onClick: function () { } // Callback after click
   }).showToast();
 
 
@@ -54,7 +54,7 @@ const validarProductoCarrito = (productoId) => {
 
 
 const pintarProductosCarrito = (producto) => {
-    
+
   const modalBody = document.querySelector('.modal-body');
   const div = document.createElement('div');
 
@@ -71,7 +71,7 @@ const pintarProductosCarrito = (producto) => {
 
 
 const eliminarProductoCarrito = (productoId) => {
-  
+
   Toastify({
     text: "Producto eliminado",
     duration: 2000,
@@ -85,7 +85,7 @@ const eliminarProductoCarrito = (productoId) => {
       borderRadius: "2rem",
       textTransform: "uppercase"
     },
-    onClick: function(){} // Callback after click
+    onClick: function () { } // Callback after click
   }).showToast();
 
   const productoIndex = carrito.findIndex((producto) => producto.id == productoId);
@@ -101,7 +101,7 @@ const eliminarProductoCarrito = (productoId) => {
 
 
 const pintarCarrito = (carrito) => {
-  
+
   const modalBody = document.querySelector('.modal-body');
 
   modalBody.innerHTML = '';
@@ -109,7 +109,7 @@ const pintarCarrito = (carrito) => {
   carrito.forEach(producto => {
     const div = document.createElement('div');
 
-  div.innerHTML += `
+    div.innerHTML += `
       <p>${producto.nombre}</p>
       <p>$${producto.precio}</p>
       <p id=cantidad${producto.id}>cantidad ${producto.cantidad}</p>
@@ -119,7 +119,7 @@ const pintarCarrito = (carrito) => {
 
   });
   actualizarTotalCarrito(carrito);
- 
+
 };
 
 
@@ -131,7 +131,7 @@ const actualizarTotalCarrito = (carrito) => {
   guardarCarritoStorage(carrito);
 
   guardarPrecioTotalStorage(compraTotal);
-  
+
 };
 
 const pintarTotalesCarrito = (compraTotal) => {
@@ -150,8 +150,9 @@ const guardarCarritoStorage = (carrito) => {
 
 //guardar precio total storage
 const guardarPrecioTotalStorage = (compraTotal) => {
-   localStorage.setItem('compraTotal', JSON.stringify(compraTotal));
-   };
+  localStorage.setItem('compraTotal', JSON.stringify(compraTotal));
+};
+
 
 
 //vaciar carrito
@@ -159,30 +160,41 @@ const vaciarCarritoBoton = document.getElementById('botonVaciar');
 
 vaciarCarritoBoton.addEventListener("click", vaciarCarrito);
 
-
 function vaciarCarrito() {
 
-  Swal.fire({
-    title: "¿Esás seguro?",
-    icon: "question",
-    html:`Se borrarán ${carrito.reduce((acc, producto) => acc + producto.cantidad, 0)} productos`,
-    showCancelButton: true,
-    focusConfirm: false,
-    confirmButtonText: "Si",
-    cancelButtonText:"No"
-  }).then((result) => {
-    /* Read more about isConfirmed, isDenied below */
-    if (result.isConfirmed) {
-      carrito.length = 0;
-      localStorage.setItem("carrito", JSON.stringify(carrito));
-      pintarCarrito(carrito);
-     
-    }
-  });
+  if (carrito.length != 0) {
 
+    Swal.fire({
+      title: "¿Esás seguro?",
+      icon: "question",
+      html: `Se borrarán ${carrito.reduce((acc, producto) => acc + producto.cantidad, 0)} productos`,
+      showCancelButton: true,
+      focusConfirm: false,
+      confirmButtonText: "Si",
+      cancelButtonText: "No"
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        carrito.length = 0;
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+        pintarCarrito(carrito);
+
+      }
+    });
+  }
+
+  else {
+    Swal.fire({
+      title: "¡Debes tener productos en el carrito!",
+      icon: "error"
+    });
+
+  }
   actualizarTotalCarrito(carrito);
- 
+
 };
+
+
 
 //comprar
 const comprarBoton = document.getElementById('botonComprar');
@@ -191,31 +203,41 @@ comprarBoton.addEventListener("click", comprar);
 
 function comprar() {
 
-  Swal.fire({
-    title: "¿Estas seguro?",
-    icon: "warning",
-    showCancelButton: true,
-    cancelButtonText:"Cancelar",
-    cancelButtonColor: "#d33",
-    confirmButtonColor: "#3085d6",
-    confirmButtonText: "Comprar"
-  }).then((result) => {
-    /* Read more about isConfirmed, isDenied below */
-    if (result.isConfirmed) {
-      carrito.length = 0;
-      localStorage.setItem("carrito", JSON.stringify(carrito));
-      
-      Swal.fire({
-        title: "¡Su compra se ha realizado con éxito!",
-        text: "¡Gracias por confiar en Pastelería ES POR TÍ!",
-        icon: "success"
-      });
-       
-      pintarCarrito(carrito);
-    }
-  });
+  if (carrito.length != 0) {
 
+    Swal.fire({
+      title: "¿Estas seguro?",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      cancelButtonColor: "#d33",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "Comprar"
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        carrito.length = 0;
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+        pintarCarrito(carrito);
+
+        Swal.fire({
+          title: "¡Su compra se ha realizado con éxito!",
+          text: "¡Gracias por confiar en Pastelería ES POR TÍ!",
+          icon: "success"
+        });
+
+      }
+    });
+  }
+
+  else {
+    Swal.fire({
+      title: "¡Debes tener productos en el carrito!",
+      icon: "error"
+    });
+  }
   actualizarTotalCarrito(carrito);
- 
+
 };
+
 
